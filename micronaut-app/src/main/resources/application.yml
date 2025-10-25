@@ -1,0 +1,54 @@
+micronaut:
+  application:
+    name: micronaut-app
+  server:
+    port: 8071
+
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+
+datasources:
+  default:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5430/demoDB
+    username: usr
+    password: pwd
+    schema-generate: none
+    dialect: POSTGRES
+
+# JPA configuration
+jpa:
+  default:
+    entity-scan:
+      packages:
+        - 'ru.otus.comparison.persistence'
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: validate
+        show_sql: true
+        format_sql: true
+
+# Flyway configuration
+flyway:
+  datasources:
+    default:
+      enabled: true
+
+
+swagger:
+  enabled: true
+  views:
+    enabled: true
+    swagger-ui:
+      enabled: true
+      path: /swagger-ui
+      spec:
+        url: /swagger/micronaut-application-1.0.yml
+

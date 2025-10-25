@@ -1,0 +1,26 @@
+micronaut:
+  server:
+    port: 0
+
+datasources:
+  default:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5430/demoDB
+    username: usr
+    password: pwd
+    schema-generate: none
+    dialect: POSTGRES
+
+# JPA configuration
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: none
+
+# Flyway configuration
+flyway:
+  datasources:
+    default:
+      enabled: none

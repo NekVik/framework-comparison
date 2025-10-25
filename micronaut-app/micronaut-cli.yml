@@ -1,5 +1,5 @@
 applicationType: default
-defaultPackage: ru.otus
+defaultPackage: ru.otus.comparison
 testFramework: junit
 sourceLanguage: java
 buildTool: gradle_kotlin
