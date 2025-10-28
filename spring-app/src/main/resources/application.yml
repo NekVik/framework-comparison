@@ -1,10 +1,20 @@
 server:
-  port: 8070
+  port: ${SERVER_PORT:8070}
 
 spring:
+  application:
+    name: ${APPLICATION_NAME:spring-app}
   datasource:
-    url: jdbc:postgresql://localhost:5430/demoDB
-    username: usr
-    password: pwd
-  flyway:
-    enabled: true
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5430/demoDB}
+    username: ${SPRING_DATASOURCE_USERNAME:usr}
+    password: ${SPRING_DATASOURCE_PASSWORD:pwd}
+    driver-class-name: org.postgresql.Driver
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE:health,info,metrics}
+  endpoint:
+    health:
+      show-details: always

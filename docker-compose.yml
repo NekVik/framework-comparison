@@ -1,0 +1,75 @@
+name: framework-comparison
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: demoDB
+      POSTGRES_USER: usr
+      POSTGRES_PASSWORD: pwd
+    ports:
+      - "5430:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  spring-app:
+    build:
+      context: .
+      dockerfile: spring-app/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/demoDB
+      SPRING_DATASOURCE_USERNAME: usr
+      SPRING_DATASOURCE_PASSWORD: pwd
+    ports:
+      - "8070:8070"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  micronaut-app:
+    build:
+      context: .
+      dockerfile: micronaut-app/Dockerfile
+    environment:
+      DATASOURCES_DEFAULT_URL: jdbc:postgresql://postgres:5432/demoDB
+      DATASOURCES_DEFAULT_USERNAME: usr
+      DATASOURCES_DEFAULT_PASSWORD: pwd
+    ports:
+      - "8071:8071"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  # Утилиты для нагрузочного тестирования
+  k6-load-test:
+    image: grafana/k6:latest
+    volumes:
+      - ./tests:/scripts
+    working_dir: /scripts
+    networks:
+      - app-network
+    profiles: ["test"]
+
+
+  wrk-load-test:
+    image: williamyeh/wrk:latest
+    networks:
+      - app-network
+    profiles: ["test"]
+
+  ab-load-test:
+    image: jordi/ab:latest
+    networks:
+      - app-network
+    profiles: ["test"]
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

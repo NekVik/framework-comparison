@@ -73,8 +73,12 @@ micronaut {
     }
 }
 
-tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
-    jdkVersion = "21"
+tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+    archiveBaseName.set("micronaut-app")
+    archiveClassifier.set("")
+    archiveVersion.set("")
 }
 
-
+tasks.assemble {
+    dependsOn("shadowJar")
+}
